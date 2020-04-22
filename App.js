@@ -1,7 +1,17 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Item,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import colors from './android/app/src/styles/Colors';
+import tempData from './android/app/src/components/tempData';
+// import TodoList from './android/app/src/components/TodoList';
+import TodoList from './android/app/src/components/TodoList';
 
 export default class App extends Component {
   render() {
@@ -13,8 +23,8 @@ export default class App extends Component {
             Todo
             <Text
               style={{
-                fontWeight: '100',
-                // color: colors.blue,
+                fontWeight: '300',
+                color: colors.blue,
                 fontFamily: 'Roboto-Thin',
               }}>
               Lists
@@ -22,7 +32,20 @@ export default class App extends Component {
           </Text>
           <View style={styles.divider} />
         </View>
-        <Icon name="ios-add" size={50} color={colors.lightBlue} />
+        <View style={{marginVertical: 48}}>
+          <TouchableOpacity style={styles.addList}>
+            <Icon name="ios-add" size={24} color={colors.blue} />
+          </TouchableOpacity>
+          <Text style={styles.add}>Add List</Text>
+        </View>
+        <View style={{height: 275, paddingLeft: 32}}>
+          <FlatList
+            data={tempData}
+            renderItem={({item}) => <TodoList list={item} />}
+            keyExtractor={(item) => item.name}
+            horizontal={true}
+          />
+        </View>
       </View>
     );
   }
@@ -46,13 +69,22 @@ const styles = StyleSheet.create({
     fontSize: 36,
     // fontWeight: '900',
     color: colors.black,
-    paddingHorizontal: 64,
+    paddingHorizontal: 10,
   },
   addList: {
+    height: 44,
+    width: 44,
     borderWidth: 2,
     borderColor: colors.lightBlue,
     borderRadius: 4,
-    padding: 16,
+    padding: 10,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  add: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.blue,
+    marginTop: 5,
   },
 });
