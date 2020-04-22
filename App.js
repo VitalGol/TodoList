@@ -5,18 +5,32 @@ import {
   View,
   TouchableOpacity,
   FlatList,
-  Item,
+  Modal,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import colors from './android/app/src/styles/Colors';
 import tempData from './android/app/src/components/tempData';
-// import TodoList from './android/app/src/components/TodoList';
 import TodoList from './android/app/src/components/TodoList';
+import AddListModal from './android/app/src/components/AddListModal';
 
 export default class App extends Component {
+  state = {
+    addTodoVisible: false,
+  };
+
+  toggleAddTodoModal() {
+    this.setState({addTodoVisible: !this.state.addTodoVisible});
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <Modal
+          animationType="slide"
+          visible={this.state.addTodoVisible}
+          onRequestClose={() => this.toggleAddTodoModal()}>
+          <AddListModal closeModal={() => this.toggleAddTodoModal()} />
+        </Modal>
         <View style={{flexDirection: 'row'}}>
           <View style={styles.divider} />
           <Text style={styles.title}>
@@ -33,7 +47,9 @@ export default class App extends Component {
           <View style={styles.divider} />
         </View>
         <View style={{marginVertical: 48}}>
-          <TouchableOpacity style={styles.addList}>
+          <TouchableOpacity
+            style={styles.addList}
+            onPress={() => this.toggleAddTodoModal()}>
             <Icon name="ios-add" size={24} color={colors.blue} />
           </TouchableOpacity>
           <Text style={styles.add}>Add List</Text>
