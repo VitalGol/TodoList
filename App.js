@@ -22,6 +22,10 @@ export default class App extends Component {
     this.setState({addTodoVisible: !this.state.addTodoVisible});
   }
 
+  renderList = (list) => {
+    return <TodoList list={list} />;
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -57,9 +61,10 @@ export default class App extends Component {
         <View style={{height: 275, paddingLeft: 32}}>
           <FlatList
             data={tempData}
-            renderItem={({item}) => <TodoList list={item} />}
             keyExtractor={(item) => item.name}
             horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({item}) => this.renderList(item)}
           />
         </View>
       </View>
