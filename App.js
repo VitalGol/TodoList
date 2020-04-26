@@ -9,15 +9,34 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import colors from './android/app/src/styles/Colors';
-import tempData from './android/app/src/components/tempData';
+// import tempData from './android/app/src/components/tempData';
 import TodoList from './android/app/src/components/TodoList';
 import AddListModal from './android/app/src/components/AddListModal';
+import Fire from './android/app/src/components/Fire';
 
 export default class App extends Component {
   state = {
     addTodoVisible: false,
-    lists: tempData,
+    lists: [],
+    user: {},
+    loading: true,
   };
+
+  componentDidMount() {
+    firebase = new Fire((error, user) => {
+      if (error) {
+        return alert('something went wrong');
+      }
+
+      firebase.getLists((lists) => {
+        this.setState({lists, user}, () => {
+          this.setState({loading: false});
+        });
+      });
+
+      this.setState({user});
+    });
+  }
 
   toggleAddTodoModal() {
     this.setState({addTodoVisible: !this.state.addTodoVisible});
@@ -56,6 +75,9 @@ export default class App extends Component {
             addList={this.addList}
           />
         </Modal>
+        <View>
+          <Text>User: {this.state.user.uid}</Text>
+        </View>
         <View style={{flexDirection: 'row'}}>
           <View style={styles.divider} />
           <Text style={styles.title}>
